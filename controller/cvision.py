@@ -104,11 +104,15 @@ def recognize_facial_expression(image, on_gpu, face_detection_method, grad_cam):
     saliency_maps = []
 
     # Detect face
-    face_coordinates = detect_face(image, face_detection_method)
+    # face_coordinates = detect_face(image, face_detection_method)
+    face_coordinates = np.array([[0, 0], [image.shape[0], image.shape[1]]])
 
     if face_coordinates is None:
         to_return_fer = FER(image)
     else:
+        # Clip coordinates b.c. they are negative sometimes
+        # face_coordinates = np.clip(face_coordinates, 0, [image.shape[0], image.shape[1]])
+
         face = image[face_coordinates[0][1]:face_coordinates[1][1], face_coordinates[0][0]:face_coordinates[1][0], :]
 
         # Get device
